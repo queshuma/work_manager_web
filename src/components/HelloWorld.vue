@@ -1,6 +1,5 @@
 <template>
   <v-sheet class="mx-auto" width="300">
-
     <v-form ref="form">
       <v-text-field
         v-model="username"

@@ -1,60 +1,79 @@
 <template>
-  <v-sheet class="mx-auto" width="300">
+  <v-container>
+    <v-row
+      style="height: 800px;"
+      no-gutters
+    >
+      <v-col align-self="start">
+        <v-sheet class="pa-2 ma-2">
+        </v-sheet>
+      </v-col>
 
-    <v-form ref="form">
-      <v-text-field
-        v-model="username"
-        :counter="10"
-        :rules="userNameRules"
-        label="Username"
-        required
-      ></v-text-field>
+      <v-col align-self="center">
+          <v-sheet class="mx-auto" width="400">
 
-      <v-text-field
-        v-model="password"
-        :counter="10"
-        :rules="passwordRules"
-        label="Password"
-        required
-      ></v-text-field>
+            <v-form ref="form">
+              <v-text-field
+                v-model="username"
+                :counter="10"
+                :rules="userNameRules"
+                label="Username"
+                required
+              ></v-text-field>
 
-      <v-checkbox
-        v-model="checkbox"
-        :rules="[v => !!v || 'You must agree to continue!']"
-        label="Do you agree?"
-        required
-      ></v-checkbox>
+              <v-text-field
+                v-model="password"
+                :counter="10"
+                :rules="passwordRules"
+                label="Password"
+                required
+              ></v-text-field>
 
-      <div class="d-flex flex-column">
-        <v-btn
-          class="mt-4"
-          color="success"
-          block
-          @click="validate"
-        >
-          LOGIN | 登录
-        </v-btn>
+              <v-checkbox
+                v-model="checkbox"
+                :rules="[v => !!v || 'You must agree to continue!']"
+                label="Do you agree?"
+                required
+              ></v-checkbox>
 
-        <v-btn
-          class="mt-4"
-          color="error"
-          block
-          @click="reset"
-        >
-          RESET | 重置
-        </v-btn>
+              <div class="d-flex flex-column">
+                <v-btn
+                  class="mt-4"
+                  color="success"
+                  block
+                  @click="validate"
+                >
+                  LOGIN | 登录
+                </v-btn>
 
-        <v-btn
-          class="mt-4"
-          color="warning"
-          block
-          @click="resetValidation"
-        >
-          REGISTER | 注册
-        </v-btn>
-      </div>
-    </v-form>
-  </v-sheet>
+                <v-btn
+                  class="mt-4"
+                  color="error"
+                  block
+                  @click="reset"
+                >
+                  RESET | 重置
+                </v-btn>
+
+                <v-btn
+                  class="mt-4"
+                  color="warning"
+                  block
+                  @click="resetValidation"
+                >
+                  REGISTER | 注册
+                </v-btn>
+              </div>
+            </v-form>
+          </v-sheet>
+      </v-col>
+
+      <v-col align-self="end">
+        <v-sheet class="pa-2 ma-2">
+        </v-sheet>
+      </v-col>
+    </v-row>
+  </v-container>
 </template>
 
 <script>

@@ -1,60 +1,28 @@
 <template>
-  <v-sheet class="mx-auto" width="300">
+  <v-container class="bg-surface-variant">
+    <v-row
+      style="height: 150px;"
+      no-gutters
+    >
+      <v-col align-self="start">
+        <v-sheet class="pa-2 ma-2">
+          .align-self-start
+        </v-sheet>
+      </v-col>
 
-    <v-form ref="form">
-      <v-text-field
-        v-model="name"
-        :counter="10"
-        :rules="nameRules"
-        label="Name"
-        required
-      ></v-text-field>
+      <v-col align-self="center">
+        <v-sheet class="pa-2 ma-2">
+          .align-self-center
+        </v-sheet>
+      </v-col>
 
-      <v-select
-        v-model="select"
-        :items="items"
-        :rules="[v => !!v || 'Item is required']"
-        label="Item"
-        required
-      ></v-select>
-
-      <v-checkbox
-        v-model="checkbox"
-        :rules="[v => !!v || 'You must agree to continue!']"
-        label="Do you agree?"
-        required
-      ></v-checkbox>
-
-      <div class="d-flex flex-column">
-        <v-btn
-          class="mt-4"
-          color="success"
-          block
-          @click="validate"
-        >
-          Validate
-        </v-btn>
-
-        <v-btn
-          class="mt-4"
-          color="error"
-          block
-          @click="reset"
-        >
-          Reset Form
-        </v-btn>
-
-        <v-btn
-          class="mt-4"
-          color="warning"
-          block
-          @click="resetValidation"
-        >
-          Reset Validation
-        </v-btn>
-      </div>
-    </v-form>
-  </v-sheet>
+      <v-col align-self="end">
+        <v-sheet class="pa-2 ma-2">
+          .align-self-end
+        </v-sheet>
+      </v-col>
+    </v-row>
+  </v-container>
 </template>
 
 <script setup>

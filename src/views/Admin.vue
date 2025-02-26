@@ -54,27 +54,27 @@ const drawer = ref(true)
 
 const items = ref([
   {
-    title: 'Dashboard',
+    title: 'Dashboard | 数据面板',
     prependIcon: 'mdi-view-dashboard-outline',
     link: true,
   },
   {
-    title: 'Team',
+    title: 'Team | 档案借阅',
     prependIcon: 'mdi-account-group',
     link: true,
   },
   {
-    title: 'Projects',
+    title: 'Projects | 档案归还',
     prependIcon: 'mdi-briefcase-outline',
     link: true,
   },
   {
-    title: 'Calendar',
+    title: 'Calendar | 档案分类',
     prependIcon: 'mdi-calendar',
     link: true,
   },
   {
-    title: 'Reports',
+    title: 'Reports | 用户管理',
     prependIcon: 'mdi-file-chart-outline',
     link: true,
   },

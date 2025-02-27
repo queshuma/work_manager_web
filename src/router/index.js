@@ -12,6 +12,11 @@ const router = createRouter({
       path: '/admin',
       name: 'admin',
       component: () => import('../views/Admin.vue')
+    },
+    {
+      path: '/borrow',
+      name: 'borrow',
+      component: () => import('../views/Borrowing.vue')
     }
   ]
 })

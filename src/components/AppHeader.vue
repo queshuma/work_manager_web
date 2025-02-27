@@ -1,6 +1,7 @@
 <template>
   <v-layout>
-    <v-app-bar class="px-md-4" color="surface-variant" flat>
+    <v-app-bar border="b" class="px-md-4" flat>
+
       <template #prepend>
         <v-app-bar-nav-icon
           v-if="$vuetify.display.smAndDown"
@@ -14,18 +15,7 @@
         src="https://cdn.vuetifyjs.com/docs/images/logos/v.svg"
       />
 
-      <template v-if="$vuetify.display.mdAndUp">
-        <v-btn
-          v-for="(item, i) in items"
-          :key="i"
-          :active="i === 0"
-          class="me-2 text-none"
-          slim
-          v-bind="item"
-        />
-      </template>
-
-      <v-spacer />
+      <v-app-bar-title>元氏县殷氏镇文献管理系统</v-app-bar-title>
 
       <template #append>
         <v-btn
@@ -38,43 +28,72 @@
 
           <v-menu activator="parent" origin="top">
             <v-list>
-              <v-list-item link title="Update profile" />
+              <v-list-item link title="重新加载" />
 
-              <v-list-item link title="Sign out" />
+              <v-list-item link title="退出账号" />
             </v-list>
           </v-menu>
         </v-btn>
       </template>
     </v-app-bar>
 
+    <v-navigation-drawer v-model="drawer">
+      <v-list density="compact" item-props :items="items" nav />
 
+      <template #append>
+        <v-list-item
+          class="ma-2"
+          link
+          nav
+          prepend-icon="mdi-cog-outline"
+          title="Settings"
+        />
+      </template>
+    </v-navigation-drawer>
 
     <v-main>
-
+      <div class="pa-4">
+        <v-sheet
+          border="dashed md"
+          color="surface-light"
+          height="800"
+          rounded="lg"
+          width="100%"
+        />
+      </div>
     </v-main>
   </v-layout>
 </template>
-
 <script setup>
-import { shallowRef } from 'vue'
+import { ref } from 'vue'
 
-const drawer = shallowRef(false)
+const drawer = ref(true)
 
-const items = [
+const items = ref([
   {
-    text: 'Dashboard',
+    title: '数据面板',
+    prependIcon: 'mdi-view-dashboard-outline',
+    link: true,
   },
   {
-    text: 'Users',
+    title: '档案借阅',
+    prependIcon: 'mdi-account-group',
+    link: true,
   },
   {
-    text: 'Projects',
+    title: '档案归还',
+    prependIcon: 'mdi-briefcase-outline',
+    link: true,
   },
   {
-    text: 'Settings',
+    title: '档案分类',
+    prependIcon: 'mdi-calendar',
+    link: true,
   },
   {
-    text: 'Contact',
+    title: '用户管理',
+    prependIcon: 'mdi-file-chart-outline',
+    link: true,
   },
-]
+])
 </script>

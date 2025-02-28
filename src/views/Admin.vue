@@ -51,15 +51,11 @@
       </template>
     </v-navigation-drawer>
 
-    <v-main>
+    <v-main min-height="900px">
       <div class="pa-4">
-        <v-sheet
-          border="dashed md"
-          color="surface-light"
-          height="800"
-          rounded="lg"
-          width="100%"
-        />
+        <a-layout-content :style="{ padding: '0 24px', minHeight: '280px' }">
+          <router-view></router-view>
+        </a-layout-content>
       </div>
     </v-main>
   </v-layout>
@@ -74,26 +70,31 @@ const items = ref([
     title: '数据面板',
     prependIcon: 'mdi-view-dashboard-outline',
     link: true,
+    route: '/dashboard',
   },
   {
     title: '档案借阅',
     prependIcon: 'mdi-account-group',
     link: true,
+    to: '/admin/borrow',
   },
   {
     title: '档案归还',
     prependIcon: 'mdi-briefcase-outline',
     link: true,
+    to: '/admin/back',
   },
   {
     title: '档案分类',
     prependIcon: 'mdi-calendar',
     link: true,
+    to: '/admin/classify',
   },
   {
     title: '用户管理',
     prependIcon: 'mdi-file-chart-outline',
     link: true,
+    to: '/admin/user',
   },
 ])
 </script>

@@ -37,30 +37,8 @@
       </template>
     </v-app-bar>
 
-    <v-navigation-drawer v-model="drawer">
-      <v-list density="compact" item-props :items="items" nav />
-
-      <template #append>
-        <v-list-item
-          class="ma-2"
-          link
-          nav
-          prepend-icon="mdi-cog-outline"
-          title="Settings"
-        />
-      </template>
-    </v-navigation-drawer>
-
     <v-main>
-      <div class="pa-4">
-        <v-sheet
-          border="dashed md"
-          color="surface-light"
-          height="800"
-          rounded="lg"
-          width="100%"
-        />
-      </div>
+
     </v-main>
   </v-layout>
 </template>

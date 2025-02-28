@@ -43,6 +43,14 @@ export default defineConfig({
   },
   server: {
     port: 3000,
+    proxy: {
+      // 代理配置
+      '/api': {
+        target: 'http://localhost:8181', // 后端服务器地址
+        changeOrigin: true, // 允许跨域
+        secure: false,
+      },
+    },
   },
   css: {
     preprocessorOptions: {

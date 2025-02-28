@@ -5,10 +5,11 @@
     "module": "esnext",
     "baseUrl": "./",
     "moduleResolution": "bundler",
+    "changeOrigin": true,
     "paths": {
       "@/*": [
         "src/*"
-      ]
+      ],
     },
     "lib": [
       "esnext",

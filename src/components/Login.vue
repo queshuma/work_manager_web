@@ -57,6 +57,9 @@
 </template>
 
 <script>
+import link from "@/api/Link.js";
+import router from "@/router/index.js";
+
 export default {
   data: () => ({
     username: '',
@@ -75,6 +78,12 @@ export default {
   methods: {
     async validate () {
       const { valid } = await this.$refs.form.validate()
+
+      link("/User/login", 'GET',{}, {'username': this.username, 'password': this.password}, {}, true).then(response => {
+        if (response.status === 200) {
+          router.push("/Admin/user")
+        }
+      })
 
       if (valid) alert('Form is valid')
     },

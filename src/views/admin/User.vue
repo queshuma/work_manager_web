@@ -156,20 +156,23 @@
 </template>
 <script setup>
 import { computed, nextTick, ref, watch } from 'vue'
+import link from "@/api/Link.js";
+import router from "@/router/index.js";
 
 const dialog = ref(false)
 const dialogDelete = ref(false)
 const headers = ref([
   {
-    title: '文献名称:',
+    title: '档案名称:',
     align: 'start',
     sortable: false,
     key: 'name',
   },
-  { title: '分类:', key: 'fat' },
-  { title: '数据来源:', key: 'fat' },
-  { title: '创建人:', key: 'carbs' },
-  { title: '创建时间:', key: 'protein' },
+  { title: '分类:', key: 'classify' },
+  { title: '数据来源:', key: 'source' },
+  { title: '创建人:', key: 'createName' },
+  { title: '创建时间:', key: 'createTime' +
+      '' },
   { title: '备案人:', key: 'calories' },
   { title: '备案时间:', key: 'calories' },
   { title: '操作:', key: 'actions', sortable: false },
@@ -194,6 +197,11 @@ const formTitle = computed(() => {
   return editedIndex.value === -1 ? 'New Item' : 'Edit Item'
 })
 function initialize () {
+  link("/User/login", 'GET',{}, {'username': this.username, 'password': this.password}, {}, true).then(response => {
+    if (response.status === 200) {
+      router.push("/Admin/user")
+    }
+  })
   desserts.value = [
     {
       name: 'Frozen Yogurt',

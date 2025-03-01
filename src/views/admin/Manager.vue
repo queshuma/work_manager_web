@@ -25,7 +25,7 @@
               color="primary"
               v-bind="props"
             >
-              New Item
+              新建档案文件
             </v-btn>
           </template>
           <v-card>
@@ -42,7 +42,7 @@
                     sm="6"
                   >
                     <v-text-field
-                      v-model="editedItem.name"
+                      v-model="editedItem.recordName"
                       label="文献名称:"
                     ></v-text-field>
                   </v-col>
@@ -52,8 +52,8 @@
                     sm="6"
                   >
                     <v-text-field
-                      v-model="editedItem.calories"
-                      label="Calories"
+                      v-model="editedItem.establishName"
+                      label="建立人姓名"
                     ></v-text-field>
                   </v-col>
                   <v-col
@@ -62,8 +62,8 @@
                     sm="6"
                   >
                     <v-text-field
-                      v-model="editedItem.fat"
-                      label="Fat (g)"
+                      v-model="editedItem.fileSource"
+                      label="数据来源"
                     ></v-text-field>
                   </v-col>
                   <v-col
@@ -72,8 +72,8 @@
                     sm="6"
                   >
                     <v-text-field
-                      v-model="editedItem.carbs"
-                      label="Carbs (g)"
+                      v-model="editedItem.establishDate"
+                      label="建立时间"
                     ></v-text-field>
                   </v-col>
                   <v-col
@@ -82,10 +82,14 @@
                     sm="6"
                   >
                     <v-text-field
-                      v-model="editedItem.protein"
-                      label="Protein (g)"
+                      v-model="editedItem.recordClassify"
+                      label="分类"
                     ></v-text-field>
                   </v-col>
+                  <v-text-field
+                    v-model="editedItem.createUserName"
+                    label="创建人"
+                  ></v-text-field>
                 </v-row>
               </v-container>
             </v-card-text>
@@ -97,14 +101,14 @@
                 variant="text"
                 @click="close"
               >
-                Cancel
+                取消
               </v-btn>
               <v-btn
                 color="blue-darken-1"
                 variant="text"
                 @click="save"
               >
-                Save
+                保存
               </v-btn>
             </v-card-actions>
           </v-card>
@@ -156,32 +160,37 @@
 </template>
 <script setup>
 import { computed, nextTick, ref, watch } from 'vue'
+import link from "@/api/Link.js";
+import router from "@/router/index.js";
 
 const dialog = ref(false)
 const dialogDelete = ref(false)
 const headers = ref([
+  { title: '编号:', key: 'id' },
   {
     title: '档案名称:',
     align: 'start',
     sortable: false,
-    key: 'name',
+    key: 'recordName',
   },
-  { title: '分类:', key: 'fat' },
-  { title: '数据来源:', key: 'fat' },
-  { title: '创建人:', key: 'carbs' },
-  { title: '创建时间:', key: 'protein' },
-  { title: '备案人:', key: 'calories' },
-  { title: '备案时间:', key: 'calories' },
+  { title: '分类:', key: 'recordClassify' },
+  { title: '数据来源:', key: 'fileSource' },
+  { title: '创建人:', key: 'establishName' },
+  { title: '创建时间:', key: 'establishDate' },
+  { title: '备案人:', key: 'createUserName' },
+  { title: '备案时间:', key: 'createDate' },
   { title: '操作:', key: 'actions', sortable: false },
 ])
 const desserts = ref([])
 const editedIndex = ref(-1)
 const editedItem = ref({
-  name: '',
-  calories: 0,
-  fat: 0,
-  carbs: 0,
-  protein: 0,
+  recordName: '',
+  recordClassify: '',
+  fileSource: '',
+  establishName: '',
+  establishDate: '',
+  createUserName: '',
+  createDate: '',
 })
 const defaultItem = ref({
   name: '',
@@ -191,81 +200,20 @@ const defaultItem = ref({
   protein: 0,
 })
 const formTitle = computed(() => {
-  return editedIndex.value === -1 ? 'New Item' : 'Edit Item'
+  return editedIndex.value === -1 ? '新建档案信息' : '编辑档案信息'
 })
 function initialize () {
-  desserts.value = [
-    {
-      name: 'Frozen Yogurt',
-      calories: 159,
-      fat: 6,
-      carbs: 24,
-      protein: 4,
-    },
-    {
-      name: 'Ice cream sandwich',
-      calories: 237,
-      fat: 9,
-      carbs: 37,
-      protein: 4.3,
-    },
-    {
-      name: 'Eclair',
-      calories: 262,
-      fat: 16,
-      carbs: 23,
-      protein: 6,
-    },
-    {
-      name: 'Cupcake',
-      calories: 305,
-      fat: 3.7,
-      carbs: 67,
-      protein: 4.3,
-    },
-    {
-      name: 'Gingerbread',
-      calories: 356,
-      fat: 16,
-      carbs: 49,
-      protein: 3.9,
-    },
-    {
-      name: 'Jelly bean',
-      calories: 375,
-      fat: 0,
-      carbs: 94,
-      protein: 0,
-    },
-    {
-      name: 'Lollipop',
-      calories: 392,
-      fat: 0.2,
-      carbs: 98,
-      protein: 0,
-    },
-    {
-      name: 'Honeycomb',
-      calories: 408,
-      fat: 3.2,
-      carbs: 87,
-      protein: 6.5,
-    },
-    {
-      name: 'Donut',
-      calories: 452,
-      fat: 25,
-      carbs: 51,
-      protein: 4.9,
-    },
-    {
-      name: 'KitKat',
-      calories: 518,
-      fat: 26,
-      carbs: 65,
-      protein: 7,
-    },
-  ]
+  desserts.value = []
+  link("/Record/manager", 'POST',{
+    'page': 0,
+    'size': 50,
+    'filterName': '',
+    'filterClassify': ''
+  }, {}, {}, ).then(response => {
+    if (response.status === 200) {
+      desserts.value = response.data.records
+    }
+  })
 }
 function history (item) {
   editedIndex.value = desserts.value.indexOf(item)
@@ -302,9 +250,24 @@ function closeDelete () {
 }
 function save () {
   if (editedIndex.value > -1) {
+    // 编辑档案信息
+    console.log(desserts.value[editedIndex.value], editedItem.value)
     Object.assign(desserts.value[editedIndex.value], editedItem.value)
   } else {
-    desserts.value.push(editedItem.value)
+    console.log(editedItem.value)
+    link("/Record/addRecord", 'POST',{
+      'recordName': editedItem.value.recordName,
+      'establishName': editedItem.value.establishName,
+      'fileSource': editedItem.value.fileSource,
+      'establishDate': editedItem.value.establishDate,
+      'recordClassify': editedItem.value.recordClassify,
+      'createDate': editedItem.value.createDate,
+      'createUserName': editedItem.value.createUserName,
+    }, {}, {} ).then(response => {
+      if (response.status === 200) {
+        desserts.value = response.data
+      }
+    })
   }
   close()
 }

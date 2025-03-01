@@ -17,7 +17,7 @@ const router = createRouter({
           path: '/admin/borrow',
           label: '档案借阅',
           name: 'borrow',
-          component: () => import('../views/admin/Borrowing.vue')
+          component: () => import('../views/admin/Manager.vue')
         },
         {
           path: '/admin/back',

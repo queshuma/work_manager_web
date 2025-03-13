@@ -157,24 +157,25 @@
 </template>
 <script setup>
 import { computed, nextTick, ref, watch } from 'vue'
+import link from "@/api/Link.js";
 
 const dialog = ref(false)
 const dialogDelete = ref(false)
 const headers = ref([
-  { title: '档案编号:', key: 'fat' },
+  { title: '档案编号:', key: 'id' },
   {
     title: '档案名称:',
     align: 'start',
     sortable: false,
-    key: 'name',
+    key: 'recordName',
   },
-  { title: '分类:', key: 'fat' },
-  { title: '数据来源:', key: 'fat' },
-  { title: '查阅人:', key: 'carbs' },
-  { title: '查阅部门:', key: 'protein' },
-  { title: '查阅时间:', key: 'calories' },
-  { title: '登记人:', key: 'calories' },
-  { title: '操作::', key: 'actions', sortable: false },
+  { title: '档案分类:', key: 'recordClassify' },
+  { title: '数据来源:', key: 'fileSource' },
+  { title: '档案创建人:', key: 'establishName' },
+  { title: '创建时间:', key: 'establishDate' },
+  { title: '档案备案人:', key: 'createUserName' },
+  { title: '备案时间:', key: 'createDate' },
+  { title: '操作:', key: 'actions', sortable: false },
 ])
 const desserts = ref([])
 const editedIndex = ref(-1)
@@ -196,78 +197,18 @@ const formTitle = computed(() => {
   return editedIndex.value === -1 ? 'New Item' : 'Edit Item'
 })
 function initialize () {
-  desserts.value = [
-    {
-      name: 'Frozen Yogurt',
-      calories: 159,
-      fat: 6,
-      carbs: 24,
-      protein: 4,
-    },
-    {
-      name: 'Ice cream sandwich',
-      calories: 237,
-      fat: 9,
-      carbs: 37,
-      protein: 4.3,
-    },
-    {
-      name: 'Eclair',
-      calories: 262,
-      fat: 16,
-      carbs: 23,
-      protein: 6,
-    },
-    {
-      name: 'Cupcake',
-      calories: 305,
-      fat: 3.7,
-      carbs: 67,
-      protein: 4.3,
-    },
-    {
-      name: 'Gingerbread',
-      calories: 356,
-      fat: 16,
-      carbs: 49,
-      protein: 3.9,
-    },
-    {
-      name: 'Jelly bean',
-      calories: 375,
-      fat: 0,
-      carbs: 94,
-      protein: 0,
-    },
-    {
-      name: 'Lollipop',
-      calories: 392,
-      fat: 0.2,
-      carbs: 98,
-      protein: 0,
-    },
-    {
-      name: 'Honeycomb',
-      calories: 408,
-      fat: 3.2,
-      carbs: 87,
-      protein: 6.5,
-    },
-    {
-      name: 'Donut',
-      calories: 452,
-      fat: 25,
-      carbs: 51,
-      protein: 4.9,
-    },
-    {
-      name: 'KitKat',
-      calories: 518,
-      fat: 26,
-      carbs: 65,
-      protein: 7,
-    },
-  ]
+  desserts.value = []
+  link("/Record/manager", 'POST',{
+    'page': 0,
+    'size': 50,
+    'filterName': '',
+    'filterClassify': '',
+    'statusEnum': 'OUTBOUND_SHIPMENTS',
+  }, {}, {}, ).then(response => {
+    if (response.status === 200) {
+      desserts.value = response.data.records
+    }
+  })
 }
 function history (item) {
   editedIndex.value = desserts.value.indexOf(item)

@@ -15,104 +15,7 @@
           vertical
         ></v-divider>
         <v-spacer></v-spacer>
-        <v-dialog
-          v-model="dialog"
-          max-width="500px"
-        >
-          <template v-slot:activator="{ props }">
-            <v-btn
-              class="mb-2"
-              color="primary"
-              v-bind="props"
-            >
-              新建档案文件
-            </v-btn>
-          </template>
-          <v-card>
-            <v-card-title>
-              <span class="text-h5">{{ formTitle }}</span>
-            </v-card-title>
 
-            <v-card-text>
-              <v-container>
-                <v-row>
-                  <v-col
-                    cols="12"
-                    md="4"
-                    sm="6"
-                  >
-                    <v-text-field
-                      v-model="editedItem.recordName"
-                      label="文献名称:"
-                    ></v-text-field>
-                  </v-col>
-                  <v-col
-                    cols="12"
-                    md="4"
-                    sm="6"
-                  >
-                    <v-text-field
-                      v-model="editedItem.establishName"
-                      label="建立人姓名"
-                    ></v-text-field>
-                  </v-col>
-                  <v-col
-                    cols="12"
-                    md="4"
-                    sm="6"
-                  >
-                    <v-text-field
-                      v-model="editedItem.fileSource"
-                      label="数据来源"
-                    ></v-text-field>
-                  </v-col>
-                  <v-col
-                    cols="12"
-                    md="4"
-                    sm="6"
-                  >
-                    <v-text-field
-                      v-model="editedItem.establishDate"
-                      label="建立时间"
-                    ></v-text-field>
-                  </v-col>
-                  <v-col
-                    cols="12"
-                    md="4"
-                    sm="6"
-                  >
-                    <v-text-field
-                      v-model="editedItem.recordClassify"
-                      label="分类"
-                    ></v-text-field>
-                  </v-col>
-                  <v-text-field
-                    v-model="editedItem.createUserName"
-                    label="创建人"
-                  ></v-text-field>
-                </v-row>
-              </v-container>
-            </v-card-text>
-
-            <v-card-actions>
-              <v-spacer></v-spacer>
-              <v-btn
-                color="blue-darken-1"
-                variant="text"
-                @click="close"
-              >
-                取消
-              </v-btn>
-              <v-btn
-                color="blue-darken-1"
-                variant="text"
-                @click="save"
-              >
-                保存
-              </v-btn>
-            </v-card-actions>
-          </v-card>
-        </v-dialog>
         <v-dialog v-model="dialogDelete" max-width="500px">
           <v-card>
             <v-card-title class="text-h5">Are you sure you want to delete this item?</v-card-title>
@@ -157,27 +60,32 @@
       </v-btn>
     </template>
   </v-data-table>
+  <BorrowCreate></BorrowCreate>
 </template>
 <script setup>
 import { computed, nextTick, ref, watch } from 'vue'
 import link from "@/api/Link.js";
+import { useStore } from 'vuex'
 import router from "@/router/index.js";
+import {tr} from "vuetify/locale";
+import HomeModule from "@/store/HomeModule.js";
+import BorrowCreate from "@/components/BorrowCreate.vue";
 
 const dialog = ref(false)
 const dialogDelete = ref(false)
 const headers = ref([
-  { title: '编号:', key: 'id' },
+  { title: '档案编号:', key: 'id' },
   {
     title: '档案名称:',
     align: 'start',
     sortable: false,
     key: 'recordName',
   },
-  { title: '分类:', key: 'recordClassify' },
+  { title: '档案分类:', key: 'recordClassify' },
   { title: '数据来源:', key: 'fileSource' },
-  { title: '创建人:', key: 'establishName' },
+  { title: '档案创建人:', key: 'establishName' },
   { title: '创建时间:', key: 'establishDate' },
-  { title: '备案人:', key: 'createUserName' },
+  { title: '档案备案人:', key: 'createUserName' },
   { title: '备案时间:', key: 'createDate' },
   { title: '操作:', key: 'actions', sortable: false },
 ])
@@ -193,12 +101,16 @@ const editedItem = ref({
   createDate: '',
 })
 const defaultItem = ref({
-  name: '',
-  calories: 0,
-  fat: 0,
-  carbs: 0,
-  protein: 0,
+  recordName: '',
+  recordClassify: '',
+  fileSource: '',
+  establishName: '',
+  establishDate: '',
+  createUserName: '',
+  createDate: '',
 })
+
+let store = useStore()
 const formTitle = computed(() => {
   return editedIndex.value === -1 ? '新建档案信息' : '编辑档案信息'
 })
@@ -221,9 +133,23 @@ function history (item) {
   dialog.value = true
 }
 function borrow (item) {
-  editedIndex.value = desserts.value.indexOf(item)
-  editedItem.value = Object.assign({}, item)
-  dialog.value = true
+  store.commit('SET_BORROW_CREATE', item)
+  // console.log("true")
+  // console.log(HomeModule.state.borrowCreateVisible)
+  // editedIndex.value = desserts.value.indexOf(item)
+  // link("/Record/borrow", 'POST',{
+  //   "id": item.id,
+  //   "recordId": item.recordId,
+  //   "recordName": item.recordName,
+  //   "department": item.department,
+  //   "departmentUserName": item.departmentUserName,
+  //   "departmentUserPhone": item.departmentUserPhone,
+  //   "extractTime": "",
+  // }, {}, {}, ).then(response => {
+  //   if (response.status === 200) {
+  //     alert(item.recordName + "档案借阅成功! ")
+  //   }
+  // })
 }
 function deleteItem (item) {
   editedIndex.value = desserts.value.indexOf(item)

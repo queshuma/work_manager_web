@@ -66,9 +66,6 @@
 import { computed, nextTick, ref, watch } from 'vue'
 import link from "@/api/Link.js";
 import { useStore } from 'vuex'
-import router from "@/router/index.js";
-import {tr} from "vuetify/locale";
-import HomeModule from "@/store/HomeModule.js";
 import BorrowCreate from "@/components/BorrowCreate.vue";
 
 const dialog = ref(false)
@@ -133,7 +130,9 @@ function history (item) {
   dialog.value = true
 }
 function borrow (item) {
-  store.commit('SET_BORROW_CREATE', item)
+  store.commit('setShowComponent', item)
+
+
   // console.log("true")
   // console.log(HomeModule.state.borrowCreateVisible)
   // editedIndex.value = desserts.value.indexOf(item)

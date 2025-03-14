@@ -1,5 +1,5 @@
-<template v-slot:top>\
-    <v-card v-show=show max-width="80%">
+<template v-slot:top>
+    <v-card v-if="$store.state.showComponent" show max-width="80%">
       <v-card-title>
         <span class="text-h5">{{ formTitle }}</span>
       </v-card-title>
@@ -88,7 +88,6 @@
 <script setup>
 import { useStore } from "vuex";
 import { watch,ref } from "vue";
-import $store from "@/store/HomeModule.js";
 
 let store = useStore()
 
@@ -103,11 +102,7 @@ const editedItem = ref({
 })
 const show = ref(false)
 
-watch(() => store.state.borrowCreateVisible, (newValue) => {
-  editedItem.value = newValue;
-  show.value = store.state.borrowCreateVisible
-  console.log(newValue);
-});
+
 </script>
 
 <style scoped>

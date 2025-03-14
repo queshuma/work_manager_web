@@ -9,11 +9,11 @@ import { registerPlugins } from '@/plugins'
 
 // Components
 import App from './App.vue'
-import store from './store/store.js'
 
 // Composables
 import { createApp } from 'vue'
 import router from "@/router/index.js";
+import store from "./store/store.js"
 
 const app = createApp(App)
 

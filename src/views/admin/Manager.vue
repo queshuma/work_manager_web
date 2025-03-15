@@ -96,6 +96,7 @@ const editedItem = ref({
   establishDate: '',
   createUserName: '',
   createDate: '',
+  status: '',
 })
 const defaultItem = ref({
   recordName: '',
@@ -105,6 +106,7 @@ const defaultItem = ref({
   establishDate: '',
   createUserName: '',
   createDate: '',
+  status: '',
 })
 
 let store = useStore()
@@ -130,8 +132,7 @@ function history (item) {
   dialog.value = true
 }
 function borrow (item) {
-  store.commit('setShowComponent', item)
-
+  store.commit('setBorrowComponent', item)
 
   // console.log("true")
   // console.log(HomeModule.state.borrowCreateVisible)

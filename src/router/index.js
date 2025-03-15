@@ -15,7 +15,7 @@ const router = createRouter({
       children: [
         {
           path: '/admin/borrow',
-          label: '档案借阅',
+          label: '档案管理',
           name: 'borrow',
           component: () => import('../views/admin/Manager.vue')
         },

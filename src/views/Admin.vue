@@ -73,7 +73,7 @@ const items = ref([
     route: '/dashboard',
   },
   {
-    title: '档案借阅',
+    title: '档案管理',
     prependIcon: 'mdi-account-group',
     link: true,
     to: '/admin/borrow',

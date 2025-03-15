@@ -54,7 +54,7 @@ const items = ref([
     link: true,
   },
   {
-    title: '档案借阅',
+    title: '档案管理',
     prependIcon: 'mdi-account-group',
     link: true,
   },

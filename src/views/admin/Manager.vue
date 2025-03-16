@@ -33,14 +33,14 @@
       <v-icon
         class="me-2"
         size="small"
-        @click="history(item)"
+        @click="borrow(item)"
       >
         mdi-pencil
       </v-icon>
       <v-icon
         class="me-2"
         size="small"
-        @click="borrow(item)"
+        @click="edit(item)"
       >
         mdi-pencil
       </v-icon>
@@ -60,18 +60,21 @@
       </v-btn>
     </template>
   </v-data-table>
-  <BorrowCreate></BorrowCreate>
+  <editRecord />
+  <submitRecord />
 </template>
 <script setup>
 import { computed, nextTick, ref, watch } from 'vue'
 import link from "@/api/Link.js";
-import { useStore } from 'vuex'
-import BorrowCreate from "@/components/BorrowCreate.vue";
+import { useStore } from 'vuex';
+import editRecord from "@/components/EditRecord.vue";
+import submitRecord from "@/components/SubmitBorrow.vue";
 
 const dialog = ref(false)
 const dialogDelete = ref(false)
 const headers = ref([
-  { title: '档案编号:', key: 'id' },
+  { title: '编号:', key: 'id' },
+  { title: '档案编号:', key: 'recordId' },
   {
     title: '档案名称:',
     align: 'start',
@@ -84,11 +87,14 @@ const headers = ref([
   { title: '创建时间:', key: 'establishDate' },
   { title: '档案备案人:', key: 'createUserName' },
   { title: '备案时间:', key: 'createDate' },
+  { title: '状态:', key: 'status' },
   { title: '操作:', key: 'actions', sortable: false },
 ])
 const desserts = ref([])
 const editedIndex = ref(-1)
 const editedItem = ref({
+  id: '',
+  recordId: '',
   recordName: '',
   recordClassify: '',
   fileSource: '',
@@ -99,6 +105,8 @@ const editedItem = ref({
   status: '',
 })
 const defaultItem = ref({
+  id: '',
+  recordId: '',
   recordName: '',
   recordClassify: '',
   fileSource: '',
@@ -126,30 +134,13 @@ function initialize () {
     }
   })
 }
-function history (item) {
-  editedIndex.value = desserts.value.indexOf(item)
-  editedItem.value = Object.assign({}, item)
-  dialog.value = true
-}
+// 借阅
 function borrow (item) {
-  store.commit('setBorrowComponent', item)
-
-  // console.log("true")
-  // console.log(HomeModule.state.borrowCreateVisible)
-  // editedIndex.value = desserts.value.indexOf(item)
-  // link("/Record/borrow", 'POST',{
-  //   "id": item.id,
-  //   "recordId": item.recordId,
-  //   "recordName": item.recordName,
-  //   "department": item.department,
-  //   "departmentUserName": item.departmentUserName,
-  //   "departmentUserPhone": item.departmentUserPhone,
-  //   "extractTime": "",
-  // }, {}, {}, ).then(response => {
-  //   if (response.status === 200) {
-  //     alert(item.recordName + "档案借阅成功! ")
-  //   }
-  // })
+  store.commit('setSubmitBorrowComponent', item)
+}
+// 编辑
+function edit (item) {
+  store.commit('setEditRecordComponent', item)
 }
 function deleteItem (item) {
   editedIndex.value = desserts.value.indexOf(item)

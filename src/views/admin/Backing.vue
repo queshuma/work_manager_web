@@ -14,135 +14,22 @@
           inset
           vertical
         ></v-divider>
-        <v-spacer></v-spacer>
-        <v-dialog
-          v-model="dialog"
-          max-width="500px"
-        >
-          <v-card>
-            <v-card-title>
-              <span class="text-h5">{{ formTitle }}</span>
-            </v-card-title>
-
-            <v-card-text>
-              <v-container>
-                <v-row>
-                  <v-col
-                    cols="12"
-                    md="4"
-                    sm="6"
-                  >
-                    <v-text-field
-                      v-model="editedItem.id"
-                      label="档案编号:"
-                    ></v-text-field>
-                  </v-col>
-                  <v-col
-                    cols="12"
-                    md="4"
-                    sm="6"
-                  >
-                    <v-text-field
-                      v-model="editedItem.name"
-                      label="档案名称:"
-                    ></v-text-field>
-                  </v-col>
-                  <v-col
-                    cols="12"
-                    md="4"
-                    sm="6"
-                  >
-                    <v-text-field
-                      v-model="editedItem.calories"
-                      label="Calories"
-                    ></v-text-field>
-                  </v-col>
-                  <v-col
-                    cols="12"
-                    md="4"
-                    sm="6"
-                  >
-                    <v-text-field
-                      v-model="editedItem.fat"
-                      label="Fat (g)"
-                    ></v-text-field>
-                  </v-col>
-                  <v-col
-                    cols="12"
-                    md="4"
-                    sm="6"
-                  >
-                    <v-text-field
-                      v-model="editedItem.carbs"
-                      label="Carbs (g)"
-                    ></v-text-field>
-                  </v-col>
-                  <v-col
-                    cols="12"
-                    md="4"
-                    sm="6"
-                  >
-                    <v-text-field
-                      v-model="editedItem.protein"
-                      label="Protein (g)"
-                    ></v-text-field>
-                  </v-col>
-                </v-row>
-              </v-container>
-            </v-card-text>
-
-            <v-card-actions>
-              <v-spacer></v-spacer>
-              <v-btn
-                color="blue-darken-1"
-                variant="text"
-                @click="close"
-              >
-                Cancel
-              </v-btn>
-              <v-btn
-                color="blue-darken-1"
-                variant="text"
-                @click="save"
-              >
-                Save
-              </v-btn>
-            </v-card-actions>
-          </v-card>
-        </v-dialog>
-        <v-dialog v-model="dialogDelete" max-width="500px">
-          <v-card>
-            <v-card-title class="text-h5">Are you sure you want to delete this item?</v-card-title>
-            <v-card-actions>
-              <v-spacer></v-spacer>
-              <v-btn color="blue-darken-1" variant="text" @click="closeDelete">Cancel</v-btn>
-              <v-btn color="blue-darken-1" variant="text" @click="deleteItemConfirm">OK</v-btn>
-              <v-spacer></v-spacer>
-            </v-card-actions>
-          </v-card>
-        </v-dialog>
       </v-toolbar>
     </template>
     <template v-slot:item.actions="{ item }">
       <v-icon
         class="me-2"
         size="small"
-        @click="history(item)"
+        @click="back(item)"
       >
         mdi-pencil
       </v-icon>
       <v-icon
         class="me-2"
         size="small"
-        @click="borrow(item)"
+        @click="viewDetails(item)"
       >
         mdi-pencil
-      </v-icon>
-      <v-icon
-        size="small"
-        @click="deleteItem(item)"
-      >
-        mdi-delete
       </v-icon>
     </template>
     <template v-slot:no-data>
@@ -154,11 +41,15 @@
       </v-btn>
     </template>
   </v-data-table>
+  <SubmitBack />
 </template>
 <script setup>
 import { computed, nextTick, ref, watch } from 'vue'
 import link from "@/api/Link.js";
+import SubmitBack from "@/components/SubmitBack.vue";
+import { useStore } from 'vuex';
 
+let store = useStore()
 const dialog = ref(false)
 const dialogDelete = ref(false)
 const headers = ref([
@@ -193,9 +84,6 @@ const defaultItem = ref({
   carbs: 0,
   protein: 0,
 })
-const formTitle = computed(() => {
-  return editedIndex.value === -1 ? 'New Item' : 'Edit Item'
-})
 function initialize () {
   desserts.value = []
   link("/Record/manager", 'POST',{
@@ -203,59 +91,20 @@ function initialize () {
     'size': 50,
     'filterName': '',
     'filterClassify': '',
-    'statusEnum': 'OUTBOUND_SHIPMENTS',
+    'statusEnum': '1',
   }, {}, {}, ).then(response => {
     if (response.status === 200) {
       desserts.value = response.data.records
     }
   })
 }
-function history (item) {
+function back (item) {
+  store.commit('setSubmitBackComponent', item)
+}
+function viewDetails (item) {
   editedIndex.value = desserts.value.indexOf(item)
   editedItem.value = Object.assign({}, item)
   dialog.value = true
 }
-function borrow (item) {
-  editedIndex.value = desserts.value.indexOf(item)
-  editedItem.value = Object.assign({}, item)
-  dialog.value = true
-}
-function deleteItem (item) {
-  editedIndex.value = desserts.value.indexOf(item)
-  editedItem.value = Object.assign({}, item)
-  dialogDelete.value = true
-}
-function deleteItemConfirm () {
-  desserts.value.splice(editedIndex.value, 1)
-  closeDelete()
-}
-function close () {
-  dialog.value = false
-  nextTick(() => {
-    editedItem.value = Object.assign({}, defaultItem.value)
-    editedIndex.value = -1
-  })
-}
-function closeDelete () {
-  dialogDelete.value = false
-  nextTick(() => {
-    editedItem.value = Object.assign({}, defaultItem.value)
-    editedIndex.value = -1
-  })
-}
-function save () {
-  if (editedIndex.value > -1) {
-    Object.assign(desserts.value[editedIndex.value], editedItem.value)
-  } else {
-    desserts.value.push(editedItem.value)
-  }
-  close()
-}
-watch(dialog, val => {
-  val || close()
-})
-watch(dialogDelete, val => {
-  val || closeDelete()
-})
 initialize()
 </script>

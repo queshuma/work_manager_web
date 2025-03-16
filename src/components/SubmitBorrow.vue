@@ -1,5 +1,5 @@
 <template v-slot:top>
-  <v-dialog v-model="$store.state.borrowComponentShow" max-width="60%" class="align-center justify-center">
+  <v-dialog v-model="$store.state.submitBorrowComponentShow" max-width="60%" class="align-center justify-center">
     <v-card show class="borrow" >
       <v-card-title>
         <span class="text-h5">{{ formTitle }}</span>
@@ -8,6 +8,16 @@
       <v-card-text>
         <v-container>
           <v-row>
+            <v-col
+              cols="12"
+              md="3"
+              sm="6"
+            >
+              <v-text-field
+                v-model="editedItem.recordId"
+                label="文献编码:"
+              ></v-text-field>
+            </v-col>
             <v-col
               cols="12"
               md="3"
@@ -24,28 +34,8 @@
               sm="6"
             >
               <v-text-field
-                v-model="editedItem.establishName"
-                label="建立人姓名"
-              ></v-text-field>
-            </v-col>
-            <v-col
-              cols="12"
-              md="3"
-              sm="6"
-            >
-              <v-text-field
-                v-model="editedItem.fileSource"
-                label="数据来源"
-              ></v-text-field>
-            </v-col>
-            <v-col
-              cols="12"
-              md="3"
-              sm="6"
-            >
-              <v-text-field
-                v-model="editedItem.establishDate"
-                label="建立时间"
+                v-model="editedItem.createUserName"
+                label="文献创建人:"
               ></v-text-field>
             </v-col>
             <v-col
@@ -55,7 +45,7 @@
             >
               <v-text-field
                 v-model="editedItem.recordClassify"
-                label="分类"
+                label="文献分类:"
               ></v-text-field>
             </v-col>
             <v-col
@@ -64,8 +54,8 @@
               sm="6"
             >
               <v-text-field
-                v-model="editedItem.createUserName"
-                label="创建人"
+                v-model="editedItem.department"
+                label="部门名称:"
               ></v-text-field>
             </v-col>
             <v-col
@@ -73,14 +63,22 @@
               md="3"
               sm="6"
             >
-              <v-select
-              v-model="editedItem.status"
-              :items="statusOptions"
-              :item-props="statusOptions"
-              item-title="text"
-              item-value="value"
-              label="状态"
-            ></v-select></v-col>
+              <v-text-field
+                v-model="editedItem.departmentUserName"
+                label="借阅人员"
+              ></v-text-field>
+            </v-col>
+            <v-col
+              cols="12"
+              md="3"
+              sm="6"
+            >
+              <v-text-field
+                v-model="editedItem.departmentUserPhone"
+                label="借阅人联系方式:"
+              ></v-text-field>
+            </v-col>
+
           </v-row>
         </v-container>
       </v-card-text>
@@ -97,9 +95,9 @@
         <v-btn
           color="blue-darken-1"
           variant="text"
-          @click="save"
+          @click="submit"
         >
-          保存
+          提交
         </v-btn>
       </v-card-actions>
     </v-card>
@@ -114,48 +112,42 @@ import link from "@/api/Link.js";
 let store = useStore()
 
 const editedItem = ref({
+  recordId: '',
   recordName: '',
   recordClassify: '',
-  fileSource: '',
-  establishName: '',
-  establishDate: '',
+  department: '',
   createUserName: '',
-  createDate: '',
-  status: 0
+  departmentUserName: '',
+  departmentUserPhone: ''
 })
-const statusOptions= [
-  { text: '在库', value: 0 },
-  { text: '出库', value: 1 },
-  { text: '进行中', value: 2 }
-]
-const formTitle = ref("编辑档案信息")
+const formTitle = ref("文献借阅登记")
 
 watch(() => store.state.borrowInfo, (newValue) => {
   editedItem.value = newValue
-  console.log(newValue)
 })
 
-function save () {
+function submit () {
     console.log(editedItem.value)
-    link("/Record/saveRecord", 'POST',{
-      'recordName': editedItem.value.recordName,
-      'establishName': editedItem.value.establishName,
-      'fileSource': editedItem.value.fileSource,
-      'establishDate': editedItem.value.establishDate,
-      'recordClassify': editedItem.value.recordClassify,
-      'createDate': editedItem.value.createDate,
-      'createUserName': editedItem.value.createUserName,
-      'status': editedItem.value.status,
+    link("/Record/borrow", 'POST',{
+      "id": editedItem.value.id,
+      "recordId": editedItem.value.recordId,
+      "recordName": editedItem.value.recordName,
+      "department": editedItem.value.department,
+      "departmentUserName": editedItem.value.departmentUserName,
+      "departmentUserPhone": editedItem.value.departmentUserPhone,
+      "extractTime": "",
+      "regressionTime": ""
     }, {}, {} ).then(response => {
       if (response.status === 200) {
-        alert("文献信息保存成功")
-        store.commit('setBorrowComponent', null)
+        alert("文献借阅成功")
+        store.commit('closeSubmitBorrowComponent', null)
+        location.reload();
       }
     })
 }
 
 function close () {
-  store.commit('closeBorrowComponent', null)
+  store.commit('closeSubmitBorrowComponent', null)
   close()
 }
 </script>

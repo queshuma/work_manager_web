@@ -32,14 +32,6 @@
         mdi-pencil
       </v-icon>
     </template>
-    <template v-slot:no-data>
-      <v-btn
-        color="primary"
-        @click="initialize"
-      >
-        Reset
-      </v-btn>
-    </template>
   </v-data-table>
   <SubmitBack />
 </template>
@@ -99,6 +91,16 @@ function initialize () {
   })
 }
 function back (item) {
+  link("/Record/borrowInfo", 'POST',{
+    "recordId": item.recordId,
+  }, {}, {} ).then(response => {
+    if (response.status === 200) {
+      item.createUserName = response.data.createUserName;
+      item.departmentUserName = response.data.departmentUserName;
+      item.department = response.data.department;
+      item.departmentUserPhone = response.data.departmentUserPhone;
+    }
+  })
   store.commit('setSubmitBackComponent', item)
 }
 function viewDetails (item) {

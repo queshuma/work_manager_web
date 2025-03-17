@@ -23,7 +23,7 @@ export default createStore({
     },
     setSubmitBackComponent(state, paylog) {
       state.submitBackComponentShow = !state.submitBackComponentShow
-      state.borrowInfo = paylog
+      state.editBackInfo = paylog
     },
     closeSubmitBackComponent(state) {
       state.submitBackComponentShow = !state.submitBackComponentShow

@@ -97,7 +97,7 @@
           variant="text"
           @click="submit"
         >
-          提交
+          归还
         </v-btn>
       </v-card-actions>
     </v-card>
@@ -122,24 +122,18 @@ const editedItem = ref({
 })
 const formTitle = ref("文献借阅登记")
 
-watch(() => store.state.backInfo, (newValue) => {
+watch(() => store.state.editBackInfo, (newValue) => {
   editedItem.value = newValue
+  console.log(newValue)
 })
 
 function submit () {
     console.log(editedItem.value)
-    link("/Record/borrow", 'POST',{
-      "id": editedItem.value.id,
+    link("/Record/back", 'POST',{
       "recordId": editedItem.value.recordId,
-      "recordName": editedItem.value.recordName,
-      "department": editedItem.value.department,
-      "departmentUserName": editedItem.value.departmentUserName,
-      "departmentUserPhone": editedItem.value.departmentUserPhone,
-      "extractTime": "",
-      "regressionTime": ""
     }, {}, {} ).then(response => {
       if (response.status === 200) {
-        alert("文献借阅成功")
+        alert("文献归还成功")
         store.commit('closeSubmitBackComponent', null)
         location.reload();
       }

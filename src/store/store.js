@@ -10,7 +10,9 @@ export default createStore({
     editRecordComponentShow: false,
     editRecordInfo: {},
     editBackComponentShow: false,
-    editBackInfo: {}
+    editBackInfo: {},
+    editClassifyComponentShow: false,
+    editClassifyInfo: {}
   },
   mutations: {
     // 在这里定义修改状态的方法，例如：
@@ -34,6 +36,13 @@ export default createStore({
     },
     closeEditRecordComponent(state) {
       state.editRecordComponentShow = !state.editRecordComponentShow
+    },
+    setEditClassifyComponent(state, paylog) {
+      state.editClassifyComponentShow = !state.editClassifyComponentShow
+      state.editClassifyInfo = paylog
+    },
+    closeEditClassifyComponent(state) {
+      state.editClassifyComponentShow = !state.editClassifyComponentShow
     },
   },
   actions: {

@@ -15,7 +15,7 @@
           vertical
         ></v-divider>
         <v-spacer></v-spacer>
-
+        <v-btn class="mb-2" color="primary" @click="insertRecord">新增按钮</v-btn>
         <v-dialog v-model="dialogDelete" max-width="500px">
           <v-card>
             <v-card-title class="text-h5">Are you sure you want to delete this item?</v-card-title>
@@ -133,6 +133,9 @@ function borrow (item) {
 // 编辑
 function edit (item) {
   store.commit('setEditRecordComponent', item)
+}
+function insertRecord() {
+  store.commit('setEditRecordComponent', defaultItem.value)
 }
 function deleteItem (item) {
   editedIndex.value = desserts.value.indexOf(item)

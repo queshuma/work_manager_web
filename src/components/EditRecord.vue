@@ -53,10 +53,14 @@
               md="3"
               sm="6"
             >
-              <v-text-field
+              <v-select
                 v-model="editedItem.recordClassify"
+                :items="classifyOptions"
+                :item-props="classifyOptions"
+                item-title="classifyName"
+                item-value="id"
                 label="分类"
-              ></v-text-field>
+              ></v-select>
             </v-col>
             <v-col
               cols="12"
@@ -80,7 +84,8 @@
                 item-title="text"
                 item-value="value"
                 label="状态"
-              ></v-select></v-col>
+              ></v-select>
+            </v-col>
           </v-row>
         </v-container>
       </v-card-text>
@@ -128,12 +133,20 @@ const statusOptions= [
   { text: '出库', value: 1 },
   { text: '进行中', value: 2 }
 ]
+
+const classifyOptions=ref([])
 const formTitle = ref("编辑档案信息")
 
 watch(() => store.state.editRecordInfo, (newValue) => {
   editedItem.value = newValue
   console.log("value")
   console.log(editedItem)
+  link("/Classify/list", 'GET',{
+  }, {}, {} ).then(response => {
+    if (response.status === 200) {
+      classifyOptions.value = response.data
+    }
+  })
 })
 
 function save () {

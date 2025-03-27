@@ -15,7 +15,7 @@
             >
               <v-text-field
                 v-model="editedItem.id"
-                label="文献名称:"
+                label="分类编号:"
                 disabled
               ></v-text-field>
             </v-col>
@@ -26,7 +26,7 @@
             >
               <v-text-field
                 v-model="editedItem.classifyName"
-                label="建立人姓名"
+                label="分类名称"
               ></v-text-field>
             </v-col>
             <v-col
@@ -36,7 +36,7 @@
             >
               <v-text-field
                 v-model="editedItem.createName"
-                label="数据来源"
+                label="创建用户"
               ></v-text-field>
             </v-col>
             <v-col
@@ -46,7 +46,7 @@
             >
               <v-text-field
                 v-model="editedItem.createTime"
-                label="建立时间"
+                label="创建时间"
                 disabled
               ></v-text-field>
             </v-col>
@@ -101,6 +101,8 @@ watch(() => store.state.editClassifyInfo, (newValue) => {
   console.log("value")
   console.log(editedItem)
 })
+
+
 
 function save () {
   console.log(editedItem.value)

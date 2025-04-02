@@ -18,7 +18,7 @@
         <v-btn class="mb-2" color="primary" @click="insertClassify">新增按钮</v-btn>
         <v-dialog v-model="dialogDelete" max-width="500px">
           <v-card>
-            <v-card-title class="text-h5">Are you sure you want to delete this item?</v-card-title>
+            <v-card-title class="text-h5">你确定要删除这个分类吗？</v-card-title>
             <v-card-actions>
               <v-spacer></v-spacer>
               <v-btn color="blue-darken-1" variant="text" @click="closeDelete">Cancel</v-btn>
@@ -105,9 +105,12 @@ function insertClassify() {
   store.commit('setEditClassifyComponent', defaultItem.value)
 }
 function deleteItem (item) {
-  editedIndex.value = desserts.value.indexOf(item)
-  editedItem.value = Object.assign({}, item)
-  dialogDelete.value = true
+  console.log(item.id)
+  link("/Classify/remove", 'GET',{}, {'classifyId': item.id}, {}, ).then(response => {
+    if (response.status === 200) {
+      desserts.value = response.data.records
+    }
+  })
 }
 function deleteItemConfirm () {
   desserts.value.splice(editedIndex.value, 1)

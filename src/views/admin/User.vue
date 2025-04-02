@@ -42,8 +42,8 @@
                     sm="6"
                   >
                     <v-text-field
-                      v-model="editedItem.name"
-                      label="文献名称:"
+                      v-model="editedItem.id"
+                      label="编号"
                     ></v-text-field>
                   </v-col>
                   <v-col
@@ -52,8 +52,8 @@
                     sm="6"
                   >
                     <v-text-field
-                      v-model="editedItem.calories"
-                      label="Calories"
+                      v-model="editedItem.username"
+                      label="用户名"
                     ></v-text-field>
                   </v-col>
                   <v-col
@@ -62,8 +62,8 @@
                     sm="6"
                   >
                     <v-text-field
-                      v-model="editedItem.fat"
-                      label="Fat (g)"
+                      v-model="editedItem.createTime"
+                      label="创建时间"
                     ></v-text-field>
                   </v-col>
                   <v-col
@@ -72,8 +72,8 @@
                     sm="6"
                   >
                     <v-text-field
-                      v-model="editedItem.carbs"
-                      label="Carbs (g)"
+                      v-model="editedItem.address"
+                      label="用户地址"
                     ></v-text-field>
                   </v-col>
                   <v-col
@@ -82,8 +82,28 @@
                     sm="6"
                   >
                     <v-text-field
-                      v-model="editedItem.protein"
-                      label="Protein (g)"
+                      v-model="editedItem.role"
+                      label="角色"
+                    ></v-text-field>
+                  </v-col>
+                  <v-col
+                    cols="12"
+                    md="4"
+                    sm="6"
+                  >
+                    <v-text-field
+                      v-model="editedItem.online"
+                      label="是否上线"
+                    ></v-text-field>
+                  </v-col>
+                  <v-col
+                    cols="12"
+                    md="4"
+                    sm="6"
+                  >
+                    <v-text-field
+                      v-model="editedItem.deleted"
+                      label="是否删除"
                     ></v-text-field>
                   </v-col>
                 </v-row>
@@ -163,43 +183,44 @@ const dialog = ref(false)
 const dialogDelete = ref(false)
 const headers = ref([
   {
-    title: '档案名称:',
+    title: '编号:',
     align: 'start',
     sortable: false,
-    key: 'name',
+    key: 'id',
   },
-  { title: '分类:', key: 'classify' },
-  { title: '数据来源:', key: 'source' },
-  { title: '创建人:', key: 'createName' },
-  { title: '创建时间:', key: 'createTime' +
-      '' },
-  { title: '备案人:', key: 'calories' },
-  { title: '备案时间:', key: 'calories' },
-  { title: '操作:', key: 'actions', sortable: false },
+  { title: '用户名:', key: 'username' },
+  { title: '创建时间:', key: 'createTime' },
+  { title: '地址:', key: 'address' },
+  { title: '角色:', key: 'role' },
+  { title: '是否上线:', key: 'online' },
+  { title: '是否删除:', key: 'delete' },
 ])
 const desserts = ref([])
 const editedIndex = ref(-1)
 const editedItem = ref({
-  name: '',
-  calories: 0,
-  fat: 0,
-  carbs: 0,
-  protein: 0,
+  id: '',
+  username: 0,
+  createTime: 0,
+  address: 0,
+  role: 0,
 })
 const defaultItem = ref({
-  name: '',
-  calories: 0,
-  fat: 0,
-  carbs: 0,
-  protein: 0,
+  id: '',
+  username: 0,
+  createTime: 0,
+  address: 0,
+  role: 0,
 })
-const formTitle = computed(() => {
-  return editedIndex.value === -1 ? 'New Item' : 'Edit Item'
-})
+// const formTitle = computed(() => {
+//   return editedIndex.value === -1 ? 'New Item' : 'Edit Item'
+// })
 function initialize () {
-  link("/User/login", 'GET',{}, {'username': this.username, 'password': this.password}, {}, true).then(response => {
+  link("/User/page", 'POST',{}, {
+    'page': 0,
+    'size': 50,
+  }, {}, true).then(response => {
     if (response.status === 200) {
-      router.push("/Admin/user")
+      desserts.value = response.data.records
     }
   })
   desserts.value = [

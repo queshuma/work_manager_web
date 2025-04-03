@@ -193,7 +193,7 @@ const headers = ref([
   { title: '地址:', key: 'address' },
   { title: '角色:', key: 'role' },
   { title: '是否上线:', key: 'online' },
-  { title: '是否删除:', key: 'delete' },
+  { title: '是否删除:', key: 'deleted' },
 ])
 const desserts = ref([])
 const editedIndex = ref(-1)
@@ -203,6 +203,8 @@ const editedItem = ref({
   createTime: 0,
   address: 0,
   role: 0,
+  online:  false,
+  deleted: false
 })
 const defaultItem = ref({
   id: '',
@@ -210,6 +212,8 @@ const defaultItem = ref({
   createTime: 0,
   address: 0,
   role: 0,
+  online:  false,
+  deleted: false
 })
 // const formTitle = computed(() => {
 //   return editedIndex.value === -1 ? 'New Item' : 'Edit Item'

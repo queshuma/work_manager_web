@@ -78,8 +78,6 @@
 <script setup>
 import { computed, nextTick, ref, watch } from 'vue'
 import link from "@/api/Link.js";
-import router from "@/router/index.js";
-import {it} from "vuetify/locale";
 
 const dialog = ref(false)
 const dialogDelete = ref(false)

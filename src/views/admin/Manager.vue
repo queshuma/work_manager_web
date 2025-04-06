@@ -2,7 +2,7 @@
   <v-data-table
     :headers="headers"
     :items="desserts"
-    :sort-by="[{ key: 'calories', order: 'asc' }]"
+    :sort-by="[{ key: 'id', order: 'asc' }]"
   >
     <template v-slot:top>
       <v-toolbar
@@ -18,7 +18,7 @@
         <v-btn class="mb-2" color="primary" @click="insertRecord">新增按钮</v-btn>
         <v-dialog v-model="dialogDelete" max-width="500px">
           <v-card>
-            <v-card-title class="text-h5">Are you sure you want to delete this item?</v-card-title>
+            <v-card-title class="text-h5">你确定要删除 {{ item.name }} 数据吗?</v-card-title>
             <v-card-actions>
               <v-spacer></v-spacer>
               <v-btn color="blue-darken-1" variant="text" @click="closeDelete">Cancel</v-btn>
@@ -30,26 +30,9 @@
       </v-toolbar>
     </template>
     <template v-slot:item.actions="{ item }">
-      <v-icon
-        class="me-2"
-        size="small"
-        @click="borrow(item)"
-      >
-        mdi-pencil
-      </v-icon>
-      <v-icon
-        class="me-2"
-        size="small"
-        @click="edit(item)"
-      >
-        mdi-pencil
-      </v-icon>
-      <v-icon
-        size="small"
-        @click="deleteItem(item)"
-      >
-        mdi-delete
-      </v-icon>
+      <v-btn color="blue-darken-1" variant="text" density="comfortable" @click="borrow(item)">借阅</v-btn>
+      <v-btn color="blue-darken-1" variant="text" density="comfortable" @click="edit(item)">编辑</v-btn>
+      <v-btn color="blue-darken-1" variant="text" density="comfortable" @click="deleteItem(item)">删除</v-btn>
     </template>
   </v-data-table>
   <editRecord/>
@@ -110,12 +93,8 @@ const defaultItem = ref({
 })
 
 let store = useStore()
-const formTitle = computed(() => {
-  return editedIndex.value === -1 ? '新建档案信息' : '编辑档案信息'
-})
 
 function initialize() {
-  desserts.value = []
   link("/Record/manager", 'POST', {
     'page': 0,
     'size': 50,
@@ -190,7 +169,6 @@ function save() {
       }
     })
   }
-  close()
 }
 
 watch(dialog, val => {

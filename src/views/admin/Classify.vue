@@ -18,7 +18,7 @@
         <v-btn class="mb-2" color="primary" @click="insertClassify">新增按钮</v-btn>
         <v-dialog v-model="dialogDelete" max-width="500px">
           <v-card>
-            <v-card-title class="text-h5">你确定要删除这个分类吗？</v-card-title>
+            <v-card-title class="text-h5">你确定要删除 {{ item.name }} 这个分类吗？</v-card-title>
             <v-card-actions>
               <v-spacer></v-spacer>
               <v-btn color="blue-darken-1" variant="text" @click="closeDelete">Cancel</v-btn>
@@ -85,9 +85,6 @@ const defaultItem = ref({
   createTime: '',
   count: 0,
 })
-const formTitle = computed(() => {
-  return editedIndex.value === -1 ? 'New Item' : 'Edit Item'
-})
 function initialize () {
   link("/Classify/searchPage", 'POST',{
     'page': 0,
@@ -130,19 +127,11 @@ function closeDelete () {
     editedIndex.value = -1
   })
 }
-function save () {
-  if (editedIndex.value > -1) {
-    Object.assign(desserts.value[editedIndex.value], editedItem.value)
-  } else {
-    desserts.value.push(editedItem.value)
-  }
-  close()
-}
-watch(dialog, val => {
-  val || close()
-})
-watch(dialogDelete, val => {
-  val || closeDelete()
-})
+// watch(dialog, val => {
+//   val || close()
+// })
+// watch(dialogDelete, val => {
+//   val || closeDelete()
+// })
 initialize()
 </script>

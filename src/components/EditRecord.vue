@@ -170,7 +170,6 @@ function save () {
 
 function close () {
   store.commit('closeEditRecordComponent', null)
-  close()
 }
 </script>
 

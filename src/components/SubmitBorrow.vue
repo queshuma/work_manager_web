@@ -148,7 +148,6 @@ function submit () {
 
 function close () {
   store.commit('closeSubmitBorrowComponent', null)
-  close()
 }
 </script>
 

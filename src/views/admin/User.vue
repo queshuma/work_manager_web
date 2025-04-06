@@ -20,14 +20,7 @@
           max-width="500px"
         >
         </v-dialog>
-        <template v-slot:item.status="{ value }">
-          <v-chip
-            :border="`${getColor(value)} thin opacity-25`"
-            :color="getColor(value)"
-            :text="value"
-            size="x-small"
-          ></v-chip>
-        </template>
+
         <v-dialog v-model="dialogDelete" max-width="500px">
           <v-card>
             <v-card-title class="text-h5">Are you sure you want to delete this item?</v-card-title>
@@ -40,6 +33,15 @@
           </v-card>
         </v-dialog>
       </v-toolbar>
+    </template>
+    <template v-slot:item.status="{ item }">
+      <v-chip
+        :border="`${getColor(item.status)} thin opacity-25`"
+        :color="getColor(item.status)"
+        :text="getItemText(item.status)"
+        size="x-small"
+        @click=updateStatus(item)
+      ></v-chip>
     </template>
     <template v-slot:item.actions="{ item }">
       <v-icon
@@ -77,6 +79,7 @@
 import { computed, nextTick, ref, watch } from 'vue'
 import link from "@/api/Link.js";
 import router from "@/router/index.js";
+import {it} from "vuetify/locale";
 
 const dialog = ref(false)
 const dialogDelete = ref(false)
@@ -176,10 +179,27 @@ watch(dialogDelete, val => {
   val || closeDelete()
 })
 function getColor (status) {
-  if (status = 0) return 'error'
-  else if(status == 1) return  'info'
-  else if (status = 2) return 'warning'
+  console.log(status)
+  if (status === 0) return 'error'
+  else if(status === 1) return  'info'
+  else if (status === 2) return 'warning'
   else return 'success'
+}
+function getItemText (status) {
+  for (let statusOption of statusOptions) {
+    if(statusOption.value === status) {
+      console.log(statusOption.text)
+      return statusOption.text
+    }
+  }
+}
+function updateStatus (item) {
+  link("/User/updateStatus", 'GET',{}, {'userId': item.id}, {}, ).then(response => {
+    if (response.status === 200) {
+      alert("请刷新页面,查看最新数据")
+      window.location.reload();
+    }
+  })
 }
 initialize()
 </script>

@@ -92,7 +92,7 @@ function initialize () {
 }
 function back (item) {
   link("/Record/borrowInfo", 'POST',{
-    "recordId": item.recordId,
+    "id": item.id,
   }, {}, {} ).then(response => {
     if (response.status === 200) {
       item.createUserName = response.data.createUserName;

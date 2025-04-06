@@ -119,7 +119,6 @@ function save () {
 
 function close () {
   store.commit('closeEditClassifyComponent', null)
-  close()
 }
 </script>
 

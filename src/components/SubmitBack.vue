@@ -142,7 +142,7 @@ function submit () {
 
 function close () {
   store.commit('closeSubmitBackComponent', null)
-  close()
+  // close()
 }
 </script>
 

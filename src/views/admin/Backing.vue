@@ -17,20 +17,7 @@
       </v-toolbar>
     </template>
     <template v-slot:item.actions="{ item }">
-      <v-icon
-        class="me-2"
-        size="small"
-        @click="back(item)"
-      >
-        mdi-pencil
-      </v-icon>
-      <v-icon
-        class="me-2"
-        size="small"
-        @click="viewDetails(item)"
-      >
-        mdi-pencil
-      </v-icon>
+      <v-btn color="blue-darken-1" variant="text" density="comfortable" @click="back(item)">归还</v-btn>
     </template>
   </v-data-table>
   <SubmitBack />

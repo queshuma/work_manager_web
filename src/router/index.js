@@ -32,10 +32,16 @@ const router = createRouter({
           component: () => import('../views/admin/Classify.vue')
         },
         {
-          path: '/admin/user',
-          label: '档案分类',
+          path: '/admin/userManage',
+          label: '账号管理',
+          name: 'userManage',
+          component: () => import('../views/admin/UserManage.vue')
+        },
+        {
+          path: '/user/info',
+          label: '用户信息',
           name: 'user',
-          component: () => import('../views/admin/User.vue')
+          component: () => import('../views/UserInfo.vue')
         }
       ]
     },

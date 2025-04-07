@@ -30,19 +30,8 @@
       </v-toolbar>
     </template>
     <template v-slot:item.actions="{ item }">
-      <v-icon
-        class="me-2"
-        size="small"
-        @click="edit(item)"
-      >
-        mdi-pencil
-      </v-icon>
-      <v-icon
-        size="small"
-        @click="deleteItem(item)"
-      >
-        mdi-delete
-      </v-icon>
+      <v-btn color="blue-darken-1" variant="text" density="comfortable" @click="edit(item)">编辑</v-btn>
+      <v-btn color="blue-darken-1" variant="text" density="comfortable" @click="deleteItem(item)">删除</v-btn>
     </template>
   </v-data-table>
   <EditClassify />
@@ -127,11 +116,5 @@ function closeDelete () {
     editedIndex.value = -1
   })
 }
-// watch(dialog, val => {
-//   val || close()
-// })
-// watch(dialogDelete, val => {
-//   val || closeDelete()
-// })
 initialize()
 </script>

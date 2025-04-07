@@ -94,7 +94,13 @@ const items = ref([
     title: '用户管理',
     prependIcon: 'mdi-file-chart-outline',
     link: true,
-    to: '/admin/user',
+    to: '/admin/userManage',
+  },
+  {
+    title: '用户信息',
+    prependIcon: 'mdi-file-chart-outline',
+    link: true,
+    to: '/user/info',
   },
 ])
 </script>

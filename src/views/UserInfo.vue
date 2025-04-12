@@ -21,8 +21,8 @@
     // link("/User/uploadImage", 'POST',formData, {}, {}, ).then(response => {
     link("/User/uploadFile", 'POST',formData, {}, {}, ).then(response => {
       if (response.status === 200) {
-        console.log(response.data.url);
-        imageUrl.value = "http://localhost:8181/" + response.data.name;
+        console.log(response.data);
+        imageUrl.value = "http://127.0.0.1:9000" + response.data;
       }
     })
   }

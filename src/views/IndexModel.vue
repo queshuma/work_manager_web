@@ -11,7 +11,7 @@
         <div v-for="(v) in router.options.routes.slice(0, -1)" :key="v.path">
           <a-menu-item :index="v.path" v-if="!v.children" @click="currentPage(v)">
             <pie-chart-outlined />
-            <span>{{ v.label }}</span>
+            <span @click="skipLink(v.path)">{{ v.label }}</span>
           </a-menu-item>
 
           <a-sub-menu :index="v.path" v-else>
@@ -21,8 +21,8 @@
               <span>{{ v.label }}</span>
             </span>
             </template>
-            <a-menu-item v-for="val in v.children" :key="val.path" @click="currentPage(val)">
-              <span>{{ val.label }}</span>
+            <a-menu-item v-for="val in v.children" :key="val.path" >
+              <span @click="skipLink(val.path)">{{ val.label }}</span>
             </a-menu-item>
           </a-sub-menu>
         </div>
@@ -41,14 +41,14 @@ import { ref, onMounted } from 'vue';
 import { useRouter } from 'vue-router';
 const selectedKeys = ref(['1']);
 
-let router = useRouter();
+const router = useRouter();
 onMounted(() => {
   console.log("获取路由规则", router.options)
 })
 
-function currentPage(data)  {
-  selectedKeys.value = data.path
-  console.log(data)
+function skipLink(data)  {
+  selectedKeys.value = [data]
+  router.push(data)
 }
 
 </script>

@@ -7,22 +7,27 @@
       <div class="logo">
         <h2 style="color: white"></h2>
       </div>
-      <a-menu v-model:selectedKeys="selectedKeys" theme="dark" mode="inline" router>
-        <div v-for="(v) in router.options.routes.slice(0, -1)" :key="v.path">
-          <a-menu-item :index="v.path" v-if="!v.children" @click="currentPage(v)">
-            <pie-chart-outlined />
-            <span @click="skipLink(v.path)">{{ v.label }}</span>
+      <a-menu v-model:selectedKeys="selectedKeys" theme="dark" mode="inline">
+        <div v-for="v in router.options.routes.slice(0, -1)" :key="v.path">
+          <a-menu-item
+              :index="v.path"
+              v-if="!v.children"
+              @click.stop="skipLink(v.path)"
+          >
+            <span class="item">{{ v.label }}</span>
           </a-menu-item>
 
           <a-sub-menu :index="v.path" v-else>
             <template #title>
             <span>
-              <user-outlined />
               <span>{{ v.label }}</span>
             </span>
             </template>
-            <a-menu-item v-for="val in v.children" :key="val.path" >
-              <span @click="skipLink(val.path)">{{ val.label }}</span>
+            <a-menu-item v-for="val in v.children" :key="val.path"  class="item" @click.stop="skipLink(val.path)">
+              <!-- 拼接父子路径并阻止事件冒泡 -->
+              <span>
+                {{ val.label }}
+              </span>
             </a-menu-item>
           </a-sub-menu>
         </div>
@@ -37,7 +42,6 @@
 
 <script setup>
 import { ref, onMounted } from 'vue';
-// import router from "@/router";
 import { useRouter } from 'vue-router';
 const selectedKeys = ref(['1']);
 
@@ -46,11 +50,20 @@ onMounted(() => {
   console.log("获取路由规则", router.options)
 })
 
-function skipLink(data)  {
-  selectedKeys.value = [data]
-  router.push(data)
+
+function skipLink(data) {
+  console.log(data);
+  selectedKeys.value = [data];
+  router.push(data).catch(err => {
+    console.error('Navigation error:', err);
+  });
 }
 
+function init()  {
+  selectedKeys.value = [router.options.routes.slice(0, -1)[0].path]
+  console.log(selectedKeys.value)
+}
+init()
 </script>
 
 <style scoped>
@@ -85,6 +98,13 @@ function skipLink(data)  {
 }
 .ant-menu {
   font-size: 15px;
+}
+.ant-menu-item {
+  padding: 0;
+}
+.item {
+  width: 100%;
+  height: 100%;
 }
 </style>
 

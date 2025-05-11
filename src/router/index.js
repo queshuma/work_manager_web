@@ -33,7 +33,7 @@ const routes = [
             },
             {
                 path: '/admin/user',
-                label: '档案分类',
+                label: '用户管理',
                 name: 'user',
                 component: () => import('../views/UserMode.vue')
             }

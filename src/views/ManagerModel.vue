@@ -35,17 +35,20 @@
       <template  v-if="column.key === 'actions'">
         <div class="editable-row-operations">
         <span>
-          <a @click="edit(record.key)">编辑</a>
+          <a @click="edit(text)">编辑</a>
         </span>
         </div>
       </template>
     </template>
   </a-table>
+  <EditRecordComponents />
 </template>
 
 <script setup>
 import {ref} from "vue";
 import link from "@/api/Link";
+import EditRecordComponents from "@/components/Manage/EditRecordComponents.vue";
+import store from "@/store/store";
 
 const columns = ref([
   {title: '编号:', key: 'id'},
@@ -67,6 +70,10 @@ const columns = ref([
 ]);
 
 const data = ref([]);
+
+function edit(text) {
+  store.commit('setEditRecordCom', text);
+}
 
 function initialize() {
   link("/Record/manager", 'POST', {

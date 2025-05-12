@@ -7,6 +7,8 @@ const store = new Vuex.Store({
     borrowInfo: {},
     backRecordComDisplay: false,
     backRecordComInfo: {},
+    editRecordComDisplay: false,
+    editRecordComInfo: {},
     editBackComponentShow: false,
     editBackInfo: {},
     editClassifyComponentShow: false,
@@ -33,8 +35,14 @@ const store = new Vuex.Store({
       state.backRecordComInfo = paylog
     },
     setBackRecordComDisplay(state) {
-      console.log(state.backRecordComDisplay)
       state.backRecordComDisplay = !state.backRecordComDisplay
+    },
+    setEditRecordCom(state, paylog) {
+      state.editRecordComDisplay = !state.editRecordComDisplay
+      state.editRecordComInfo = paylog
+    },
+    setEditRecordComDisplay(state) {
+      state.editRecordComDisplay = !state.editRecordComDisplay
     },
     setEditClassifyComponent(state, paylog) {
       state.editClassifyComponentShow = !state.editClassifyComponentShow

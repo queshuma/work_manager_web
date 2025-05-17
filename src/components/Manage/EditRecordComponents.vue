@@ -9,10 +9,11 @@
         name="basic"
     >
       <a-form-item
-          label="文献编号"
+          label="编号"
           name="id"
+          v-if="formInfo.recordName != null"
       >
-        <a-input v-model:value="formInfo.id"/>
+        <a-input v-model:value="formInfo.id" disabled/>
       </a-form-item>
 
       <a-form-item
@@ -33,7 +34,9 @@
           label="分类名称"
           name="recordClassify"
       >
-        <a-input v-model:value="formInfo.recordClassify"/>
+        <a-select v-model:value="formInfo.recordClassify" placeholder="">
+          <a-select-option v-for="classify in classifyOptions" :key="classify.classifyName">{{ classify.classifyName }}</a-select-option>
+        </a-select>
       </a-form-item>
 
       <a-form-item
@@ -44,42 +47,18 @@
       </a-form-item>
 
       <a-form-item
-          label="创建用户"
-          name="establishName"
+          label="整理用户"
+          name="createUserName"
       >
         <a-input v-model:value="formInfo.establishName"/>
       </a-form-item>
 
       <a-form-item
-          label="创建用户"
-          name="establishDate"
-      >
-        <a-input v-model:value="formInfo.establishDate"/>
-      </a-form-item>
-
-      <a-form-item
-          label="所属用户"
-          name="createUserName"
-      >
-        <a-input v-model:value="formInfo.createUserName"/>
-      </a-form-item>
-
-      <a-form-item
-          label="创建时间"
+          label="整理时间"
           name="createDate"
       >
-        <a-input v-model:value="formInfo.createDate"/>
+        <a-date-picker v-model:value="formInfo.establishDate" aria-label="请选择日期"/>
       </a-form-item>
-
-      <a-form-item
-          label="联系方式"
-          name="status
-
-"
-      >
-        <a-input v-model:value="formInfo.status"/>
-      </a-form-item>
-
     </a-form>
   </a-modal>
 </template>
@@ -94,19 +73,41 @@ import link from "@/api/Link";
 const formInfo = ref({})
 const classifyOptions=ref([])
 
+const defaultFormInfo=ref({
+  id: '',
+  recordId: '',
+  recordName: '',
+  recordClassify: '',
+  fileSource: '',
+  establishName: '',
+  establishDate: '',
+  createUserName: '',
+  createDate: null,
+  status: '',
+})
+
 watch(() => store.state.editRecordComInfo, (newValue) => {
-  formInfo.value = newValue;
+  if (newValue == null) {
+    formInfo.value = defaultFormInfo;
+  } else {
+    formInfo.value = newValue;
+  }
   console.log(newValue);
   link("/Classify/list", 'GET',{
   }, {}, {} ).then(response => {
     if (response.status === 200) {
       classifyOptions.value = response.data
+      console.log("value")
+      console.log(classifyOptions.value)
     }
   })
+
 });
 
 function save() {
   link("/Record/saveRecord", 'POST',{
+    'id': formInfo.value.id,
+    'recordId': formInfo.value.recordId,
     'recordName': formInfo.value.recordName,
     'establishName': formInfo.value.establishName,
     'fileSource': formInfo.value.fileSource,

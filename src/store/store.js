@@ -9,10 +9,12 @@ const store = new Vuex.Store({
     backRecordComInfo: {},
     editRecordComDisplay: false,
     editRecordComInfo: {},
+    borrowRecordComDisplay: false,
+    borrowRecordComInfo: {},
     editBackComponentShow: false,
     editBackInfo: {},
-    editClassifyComponentShow: false,
-    editClassifyInfo: {}
+    editClassifyComDisplay: false,
+    editClassifyComInfo: {}
   },
   mutations: {
     // 在这里定义修改状态的方法，例如：
@@ -44,12 +46,20 @@ const store = new Vuex.Store({
     setEditRecordComDisplay(state) {
       state.editRecordComDisplay = !state.editRecordComDisplay
     },
-    setEditClassifyComponent(state, paylog) {
-      state.editClassifyComponentShow = !state.editClassifyComponentShow
-      state.editClassifyInfo = paylog
+    setBorrowRecordCom(state, paylog) {
+      state.borrowRecordComDisplay = !state.borrowRecordComDisplay
+      state.borrowRecordComInfo = paylog
     },
-    closeEditClassifyComponent(state) {
-      state.editClassifyComponentShow = !state.editClassifyComponentShow
+    setBorrowRecordComDisplay(state) {
+      state.borrowRecordComDisplay = !state.borrowRecordComDisplay
+    },
+    setEditClassifyCom(state, paylog) {
+      state.editClassifyComDisplay = !state.editClassifyComDisplay
+      console.log(state.editClassifyComDisplay)
+      state.editClassifyComInfo = paylog
+    },
+    closeEditClassifyDisplay(state) {
+      state.editClassifyComDisplay = !state.editClassifyComDisplay
     },
   },
   actions: {

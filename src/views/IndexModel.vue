@@ -73,14 +73,13 @@ init()
   height: 64px;
   padding-inline: 50px;
   line-height: 64px;
-  background-color: #7dbcea;
+  background-color: #166bfb;
 }
 .contentStyle {
   text-align: center;
   min-height: 120px;
   line-height: 120px;
   color: #fff;
-  background-color: #108ee9
 }
 .siderStyle {
   height: 800px;

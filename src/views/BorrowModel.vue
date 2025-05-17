@@ -1,15 +1,14 @@
 <template>
   <div class="model-title">
     <h3 class="h3-title">档案管理</h3>
-  </div>
-  <div class="search">
-    <a-button type="dashed" @click="insertRecord()">添加文献</a-button>
-    <a-input-search
-        v-model:value="searchTitle"
-        placeholder="根据名称查询"
-        style="width: 200px"
-        @search="searchRecord()"
-    />
+    <div class="search">
+      <a-input-search
+          v-model:value="searchTitle"
+          placeholder="根据名称查询"
+          style="width: 200px"
+          @search="searchRecord()"
+      />
+    </div>
   </div>
   <a-table :columns="columns" :data-source="data" bordered>
     <template #bodyCell="{ column, text }">
@@ -34,37 +33,23 @@
       <template v-if="column.key === 'establishDate'">
         <a>{{ text.establishDate }}</a>
       </template>
-      <template v-if="column.key === 'createUserName'">
-        <a>{{ text.createUserName }}</a>
-      </template>
-      <template v-if="column.key === 'createDate'">
-        <a>{{ text.createDate }}</a>
-      </template>
-      <template v-if="column.key === 'status'">
-        <a>{{ text.status }}</a>
-      </template>
       <template  v-if="column.key === 'actions'">
         <div class="editable-row-operations">
         <span>
-          <a @click="edit(text)">编辑</a>
-        </span>
-        </div>
-        <div class="editable-row-operations">
-        <span>
-          <a @click="remove(text)">删除</a>
+          <a @click="edit(text)">借阅</a>
         </span>
         </div>
       </template>
     </template>
   </a-table>
-  <EditRecordComponents />
+  <BorrowComponents />
 </template>
 
 <script setup>
 import {ref} from "vue";
 import link from "@/api/Link";
-import EditRecordComponents from "@/components/Manage/EditRecordComponents.vue";
 import store from "@/store/store";
+import BorrowComponents from "@/components/Borrow/BorrowComponents.vue";
 
 const columns = ref([
   {title: '编号:', key: 'id'},
@@ -77,11 +62,8 @@ const columns = ref([
   },
   {title: '档案分类:', key: 'recordClassify'},
   {title: '数据来源:', key: 'fileSource'},
-  {title: '整理用户:', key: 'establishName'},
-  {title: '整理时间:', key: 'establishDate'},
-  {title: '创建用户:', key: 'createUserName'},
-  {title: '创建时间:', key: 'createDate'},
-  {title: '状态:', key: 'status'},
+  {title: '档案创建人:', key: 'establishName'},
+  {title: '创建时间:', key: 'establishDate'},
   {title: '操作:', key: 'actions'},
 ]);
 
@@ -89,15 +71,7 @@ const data = ref([]);
 const searchTitle = ref("");
 
 function edit(text) {
-  store.commit('setEditRecordCom', text);
-}
-
-function insertRecord() {
-  store.commit('setEditRecordCom', null);
-}
-
-function remove() {
-
+  store.commit('setBorrowRecordCom', text);
 }
 
 function searchRecord() {
@@ -105,7 +79,8 @@ function searchRecord() {
     'page': 0,
     'size': 50,
     'filterName': searchTitle.value,
-    'filterClassify': ''
+    'filterClassify': '',
+    'statusEnum': '0'
   }, {}, {},).then(response => {
     if (response.status === 200) {
       data.value = response.data.records;

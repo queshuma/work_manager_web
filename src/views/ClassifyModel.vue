@@ -1,5 +1,16 @@
 <template>
-  <div>档案分类</div>
+  <div class="model-title">
+    <h3 class="h3-title">文献分类</h3>
+  </div>
+  <div class="search">
+    <a-button type="dashed" @click="insertRecord()">添加分类</a-button>
+    <a-input-search
+        v-model:value="searchTitle"
+        placeholder="根据名称查询"
+        style="width: 200px"
+        @search="searchRecord()"
+    />
+  </div>
   <a-table :columns="columns" :data-source="data" bordered>
     <template #bodyCell="{ column, text }">
       <template v-if="column.key === 'id'">
@@ -20,17 +31,20 @@
       <template  v-if="column.key === 'actions'">
         <div class="editable-row-operations">
         <span>
-          <a @click="edit(record.key)">编辑</a>
+          <a @click="edit(text)">编辑</a>
         </span>
         </div>
       </template>
     </template>
   </a-table>
+  <EditClassifyComponents />
 </template>
 
 <script setup>
 import {ref} from "vue";
 import link from "@/api/Link";
+import store from "@/store/store";
+import EditClassifyComponents from "@/components/Classify/EditClassifyComponents.vue";
 
 const columns = ref([
   { title: '分类编号', key: 'id' },
@@ -42,6 +56,14 @@ const columns = ref([
 ]);
 
 const data = ref([]);
+
+function edit(text) {
+  store.commit('setEditClassifyCom', text);
+}
+
+function insertRecord() {
+  store.commit('setEditClassifyCom', null);
+}
 
 function initialize() {
   link("/Classify/searchPage", 'POST',{

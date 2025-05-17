@@ -1,5 +1,15 @@
 <template>
-  <div>档案归还</div>
+  <div class="model-title">
+    <h3 class="h3-title">档案归还</h3>
+    <div class="search">
+      <a-input-search
+          v-model:value="searchTitle"
+          placeholder="根据名称查询"
+          style="width: 200px"
+          @search="searchRecord()"
+      />
+    </div>
+  </div>
   <a-table :columns="columns" :data-source="data" bordered>
     <template #bodyCell="{ column, text }">
       <template v-if="column.key === 'id'">
@@ -52,25 +62,26 @@ const columns = ref([
   { title: '档案名称:', key: 'recordName' },
   { title: '档案分类:', key: 'recordClassify' },
   { title: '数据来源:', key: 'fileSource' },
-  { title: '档案创建人:', key: 'establishName' },
-  { title: '创建时间:', key: 'establishDate' },
-  { title: '档案备案人:', key: 'createUserName' },
-  { title: '备案时间:', key: 'createDate' },
+  { title: '整理用户:', key: 'establishName' },
+  { title: '整理时间:', key: 'establishDate' },
+  { title: '创建用户:', key: 'createUserName' },
+  { title: '创建时间:', key: 'createDate' },
   { title: '操作:', key: 'actions', sortable: false }
 ]);
 
 const data = ref([]);
+const searchTitle = ref("");
 
 function back(text) {
   console.log(text);
   store.commit('setBackRecordCom', text)
 }
 
-function initialize() {
+function searchRecord() {
   link("/Record/manager", 'POST',{
     'page': 0,
     'size': 50,
-    'filterName': '',
+    'filterName': searchTitle.value,
     'filterClassify': '',
     'statusEnum': '1',
   }, {}, {}, ).then(response => {
@@ -78,6 +89,10 @@ function initialize() {
       data.value = response.data.records
     }
   })
+}
+
+function initialize() {
+  searchRecord()
 }
 initialize()
 </script>

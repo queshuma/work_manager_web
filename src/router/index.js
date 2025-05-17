@@ -14,14 +14,20 @@ const routes = [
         component: () => import('../views/IndexModel.vue'),
         children: [
             {
-                path: '/admin/borrow',
+                path: '/admin/manager',
                 label: '档案管理',
-                name: 'borrow',
+                name: 'manager',
                 component: () => import('../views/ManagerModel.vue')
             },
             {
+                path: '/admin/borrow',
+                label: '文献借阅',
+                name: 'borrow',
+                component: () => import('../views/BorrowModel.vue')
+            },
+            {
                 path: '/admin/back',
-                label: '档案归还',
+                label: '文献归还',
                 name: 'back',
                 component: () => import('../views/BackingModel.vue')
             },

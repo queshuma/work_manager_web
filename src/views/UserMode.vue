@@ -1,5 +1,7 @@
 <template>
-  <div>用户管理</div>
+  <div class="model-title">
+    <h3 class="h3-title">用户管理</h3>
+  </div>
   <a-table :columns="columns" :data-source="data" bordered>
     <template #bodyCell="{ column, text }">
       <template v-if="column.key === 'id'">

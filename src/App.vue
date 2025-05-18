@@ -10,13 +10,10 @@
 <script setup>
 import { RouterView } from "vue-router";
 
-// function getPopupContainer(el, dialogContext) {
-//   if (dialogContext) {
-//     return dialogContext.getDialogWrap();
-//   } else {
-//     return document.body;
-//   }
-// }
+import dayjs from 'dayjs'
+import 'dayjs/locale/zh-cn' // 加载中文语言包
+
+dayjs.locale('zh-cn') // 全局设置中文
 </script>
 
 <style>

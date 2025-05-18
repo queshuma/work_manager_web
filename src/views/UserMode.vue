@@ -22,24 +22,29 @@
       <template v-if="column.key === 'status'">
         <div v-for="status in statusOptions" :key="status.value">
           <template v-if="text.status === status.value" >
-            {{ status.text }}
+            <a-tag color="#87d068" v-if="status.text === '下线'">{{ status.text }}</a-tag>
+            <a-tag color="#108ee9" v-else-if="status.text === '上线'">{{ status.text }}</a-tag>
+            <a-tag color="#f50" v-else-if="status.text === '封禁'">{{ status.text }}</a-tag>
           </template>
         </div>
       </template>
       <template  v-if="column.key === 'actions'">
         <div class="editable-row-operations">
         <span>
-          <a @click="edit(record.key)">编辑</a>
+          <a @click="editStatus(text)">状态调整</a>
         </span>
         </div>
       </template>
     </template>
   </a-table>
+  <EditUserStatusComponents />
 </template>
 
 <script setup>
-import {ref} from "vue";
+import { ref } from "vue";
 import link from "@/api/Link";
+import store from "@/store/store";
+import EditUserStatusComponents from "@/components/User/EditUserStatusComponents.vue";
 
 const columns = ref([
   { title: '编号:', key: 'id', },
@@ -48,6 +53,7 @@ const columns = ref([
   { title: '地址:', key: 'address' },
   { title: '角色:', key: 'role' },
   { title: '当前状态:', key: 'status' },
+  { title: '操作:', key: 'actions' },
 ]);
 
 const statusOptions= [
@@ -57,6 +63,10 @@ const statusOptions= [
 ]
 
 const data = ref([]);
+
+function editStatus(record) {
+  store.commit('setEditUserStatusCom', record);
+}
 
 function initialize() {
   link("/User/page", 'POST',{

@@ -8,7 +8,7 @@
         v-model:value="searchTitle"
         placeholder="根据名称查询"
         style="width: 200px"
-        @search="searchRecord()"
+        @search="searchClassify()"
     />
   </div>
   <a-table :columns="columns" :data-source="data" bordered>
@@ -56,6 +56,7 @@ const columns = ref([
 ]);
 
 const data = ref([]);
+const searchTitle = ref("");
 
 function edit(text) {
   store.commit('setEditClassifyCom', text);
@@ -65,18 +66,21 @@ function insertRecord() {
   store.commit('setEditClassifyCom', null);
 }
 
-function initialize() {
+function searchClassify() {
   link("/Classify/searchPage", 'POST',{
     'page': 0,
     'size': 50,
-    'filterName': '',
-    'filterClassify': '',
+    'filterClassifyName': searchTitle.value,
     'statusEnum': '1',
   }, {}, {}, ).then(response => {
     if (response.status === 200) {
       data.value = response.data.records
     }
   })
+}
+
+function initialize() {
+  searchClassify()
 }
 initialize()
 </script>

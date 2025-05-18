@@ -55,7 +55,7 @@
 
       <a-form-item
           label="整理时间"
-          name="createDate"
+          name="establishDate"
       >
         <a-date-picker v-model:value="formInfo.establishDate" aria-label="请选择日期"/>
       </a-form-item>
@@ -69,6 +69,7 @@ import {ref} from 'vue';
 import {watch} from "vue";
 import store from "@/store/store";
 import link from "@/api/Link";
+import dayjs from "dayjs";
 
 const formInfo = ref({})
 const classifyOptions=ref([])
@@ -80,7 +81,7 @@ const defaultFormInfo=ref({
   recordClassify: '',
   fileSource: '',
   establishName: '',
-  establishDate: '',
+  establishDate: null,
   createUserName: '',
   createDate: null,
   status: '',
@@ -92,13 +93,12 @@ watch(() => store.state.editRecordComInfo, (newValue) => {
   } else {
     formInfo.value = newValue;
   }
-  console.log(newValue);
+  formInfo.value.establishDate = formInfo.value.establishDate ? dayjs(formInfo.value.establishDate) : null;
+  formInfo.value.createDate = formInfo.value.createDate ? dayjs(formInfo.value.createDate) : null;
   link("/Classify/list", 'GET',{
   }, {}, {} ).then(response => {
     if (response.status === 200) {
       classifyOptions.value = response.data
-      console.log("value")
-      console.log(classifyOptions.value)
     }
   })
 

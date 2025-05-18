@@ -11,7 +11,8 @@
         @search="searchRecord()"
     />
   </div>
-  <a-table :columns="columns" :data-source="data" bordered>
+  <a-table :columns="columns" :data-source="data" :pagination="pagination"
+           @change="handleTableChange" bordered >
     <template #bodyCell="{ column, text }">
       <template v-if="column.key === 'id'">
         <a>{{ text.id }}</a>
@@ -41,7 +42,9 @@
         <a>{{ text.createDate }}</a>
       </template>
       <template v-if="column.key === 'status'">
-        <a>{{ text.status }}</a>
+        <a-tag color="green" v-if="text.status === 0">在库</a-tag>
+        <a-tag color="cyan" v-if="text.status === 1">出库</a-tag>
+        <a-tag color="red" v-if="text.status === 2">已删除</a-tag>
       </template>
       <template  v-if="column.key === 'actions'">
         <div class="editable-row-operations">
@@ -49,7 +52,7 @@
           <a @click="edit(text)">编辑</a>
         </span>
         </div>
-        <div class="editable-row-operations">
+        <div class="editable-row-operations" v-if="text.status === 1">
         <span>
           <a @click="remove(text)">删除</a>
         </span>
@@ -61,7 +64,7 @@
 </template>
 
 <script setup>
-import {ref} from "vue";
+import { ref } from "vue";
 import link from "@/api/Link";
 import EditRecordComponents from "@/components/Manage/EditRecordComponents.vue";
 import store from "@/store/store";
@@ -85,8 +88,16 @@ const columns = ref([
   {title: '操作:', key: 'actions'},
 ]);
 
+const pagination = ref({
+  current: 1,
+  pageSize: 10,
+  total: 0,
+  showSizeChanger: true,
+});
+
 const data = ref([]);
 const searchTitle = ref("");
+
 
 function edit(text) {
   store.commit('setEditRecordCom', text);
@@ -96,14 +107,21 @@ function insertRecord() {
   store.commit('setEditRecordCom', null);
 }
 
-function remove() {
-
+function remove(infoForm) {
+  link("/Record/removeById", 'Get', {}, {
+    id: infoForm.id
+  }, {},).then(response => {
+    if (response.status === 200) {
+      data.value = response.data.records;
+      console.log(data)
+    }
+  })
 }
 
 function searchRecord() {
   link("/Record/manager", 'POST', {
-    'page': 0,
-    'size': 50,
+    'page': pagination.value.current,
+    'size': pagination.value.pageSize,
     'filterName': searchTitle.value,
     'filterClassify': ''
   }, {}, {},).then(response => {
@@ -113,6 +131,13 @@ function searchRecord() {
     }
   })
 }
+
+const handleTableChange = (paginator) => {
+  Object.assign(pagination.value, paginator); // 合并分页参数
+  console.log(paginator);
+  searchRecord();
+};
+
 
 function initialize() {
   searchRecord()

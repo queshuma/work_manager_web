@@ -14,7 +14,9 @@ const store = new Vuex.Store({
     editBackComponentShow: false,
     editBackInfo: {},
     editClassifyComDisplay: false,
-    editClassifyComInfo: {}
+    editClassifyComInfo: {},
+    editUserStatusComDisplay: false,
+    editUserStatusComInfo: {},
   },
   mutations: {
     // 在这里定义修改状态的方法，例如：
@@ -55,11 +57,17 @@ const store = new Vuex.Store({
     },
     setEditClassifyCom(state, paylog) {
       state.editClassifyComDisplay = !state.editClassifyComDisplay
-      console.log(state.editClassifyComDisplay)
       state.editClassifyComInfo = paylog
     },
     closeEditClassifyDisplay(state) {
       state.editClassifyComDisplay = !state.editClassifyComDisplay
+    },
+    setEditUserStatusCom(state, paylog) {
+      state.editUserStatusComDisplay = !state.editClassifyComDisplay
+      state.editUserStatusComInfo = paylog
+    },
+    setEditUserStatusComDisplay(state) {
+      state.editUserStatusComDisplay = !state.editUserStatusComDisplay
     },
   },
   actions: {
